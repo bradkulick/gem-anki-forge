@@ -1,7 +1,7 @@
 {
   "name": "anki-forge",
   "version": "0.3.0",
-  "description": "Offline flashcard factory with persistent ID tracking and flexible packaging.",
+  "description": "AI-native flashcard factory. Architect schemas with Markdown Blueprints, manage persistent libraries, and auto-sort content into Anki packages.",
   "author": "Bradford Kulick",
   "generator": "gemonade-sys",
   "python_dependencies": "requirements.txt"
