@@ -31,5 +31,7 @@
 
 ## Usage Notes
 - The Master Library is stored in `data/library.jsonl`.
-- Note Types (schemas) are defined in `config/note_types.json`.
-- When packaging, use the `--deck` flag to specify the destination deck name in Anki (e.g., `Korean::Vocab`).
+- **Note Types (Schemas)** are defined as Blueprints in `blueprints/`.
+  - To add a new note type, simply create a Markdown file (e.g., `blueprints/schema_rust.md`).
+  - Format: Define `**Model ID:**`, `**Default Deck:**`, and a list under `## Fields`.
+- When packaging, cards are automatically sorted into decks based on their blueprint configuration.
