@@ -2,6 +2,13 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Ignore build artifacts
+*.apkg
+
+# Ignore User Data (The Library)
+data/library.jsonl
+
+# Ignore User Media (but keep the folder)
 data/media/*
 !data/media/.gitkeep
-*.apkg
