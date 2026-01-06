@@ -6,21 +6,26 @@
 
 ### 1. Ingesting Knowledge
 - **`forge add --note_type [type]`**: Add a single card via interactive prompts.
+  - *Duplicate Check:* Automatically prevents adding cards with identical content.
 - **`forge add --file [path] --note_type [type]`**: Bulk import cards from a text file (using `::` separator).
 - **`forge add --json [path]`**: Import pre-formatted JSON data.
 
 ### 2. Managing the Library
-- **`forge list`**: List all cards in the library. Supports filters like `--tag` or `--note_type`.
+- **`forge list`**: List all cards in the library.
+  - `--tag [tag]`: Filter by tag.
+  - `--search [query]`: Case-insensitive substring search across all fields.
 - **`forge delete --guid [id]`**: Remove a card from the library.
 - **`forge edit --guid [id]`**: Interactively edit an existing card.
 
 ### 3. Packaging (The Forge)
-- **`forge pack --output [name].apkg`**: Compile the entire library or a subset into an Anki package.
+- **`forge pack --output [name].apkg`**: Compile the library into an Anki package.
+  - *Smart Sorting:* Automatically places cards into their `default_deck` (e.g., `Korean::Vocab`) as defined in `config/note_types.json`.
+  - `--deck [name]`: Override smart sorting to force all cards into a single deck.
 - **`forge pack --recipe [name]`**: Use a saved query and deck name from `config/recipes.json`.
 - **`forge update [recipe_name]`**: Shortcut to run a recipe and generate a fresh `.apkg`.
 
 ## Operational Style
-- **Identity First:** Always ensure cards have a `guid`. If a card is imported without one, generate a deterministic one.
+- **Identity First:** Always ensure cards have a `guid`. duplicates return the existing GUID.
 - **UTF-8 Support:** Handle Hangul and other non-ASCII characters natively.
 - **Verification:** Before packaging, verify that all referenced media files exist in `data/media/`.
 

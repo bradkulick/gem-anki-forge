@@ -18,6 +18,7 @@ def main():
     # List Command
     list_parser = subparsers.add_parser('list')
     list_parser.add_argument('--tag')
+    list_parser.add_argument('--search', help="Search term (case-insensitive)")
 
     # Delete Command
     delete_parser = subparsers.add_parser('delete')
@@ -30,7 +31,7 @@ def main():
     # Pack Command
     pack_parser = subparsers.add_parser('pack')
     pack_parser.add_argument('--output', default='output.apkg')
-    pack_parser.add_argument('--deck', default='Default')
+    pack_parser.add_argument('--deck', help="Override destination deck name")
     pack_parser.add_argument('--recipe')
 
     args = parser.parse_args()
@@ -74,6 +75,7 @@ def main():
     elif args.command == 'list':
         filters = {}
         if args.tag: filters['tag'] = args.tag
+        if args.search: filters['search'] = args.search
         cards = manager.list_cards(filters)
         for c in cards:
             print(f"[{c['guid']}] {c['note_type']}: {list(c['fields'].values())[0]}")
@@ -120,7 +122,8 @@ def main():
         else:
             cards = manager.list_cards()
             exporter.pack(cards, args.deck, args.output)
-            print(f"Packed {len(cards)} cards into {args.output}")
+            deck_msg = f" into '{args.deck}'" if args.deck else " (auto-sorted)"
+            print(f"Packed {len(cards)} cards{deck_msg} into {args.output}")
 
 if __name__ == "__main__":
     main()

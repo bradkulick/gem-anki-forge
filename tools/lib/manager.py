@@ -19,6 +19,13 @@ class LibraryManager:
             return json.load(f)
 
     def add_card(self, note_type, fields, tags=None, guid=None):
+        # Prevent Duplicates: Check if a card with identical content already exists
+        existing_cards = self.list_cards({'note_type': note_type})
+        for card in existing_cards:
+            if card['fields'] == fields:
+                print(f"Duplicate detected. Returning existing GUID: {card['guid']}")
+                return card['guid']
+
         if guid is None:
             # Generate a stable random ID (similar to Anki's internal GUIDs)
             guid = str(uuid.uuid4().hex)[:10] 
@@ -48,63 +55,6 @@ class LibraryManager:
                         cards.append(card)
         return cards
 
-    def get_card(self, guid):
-        if not os.path.exists(self.library_path):
-            return None
-        with open(self.library_path, 'r', encoding='utf-8') as f:
-            for line in f:
-                if line.strip():
-                    card = json.loads(line)
-                    if card.get('guid') == guid:
-                        return card
-        return None
-
-    def delete_card(self, guid):
-        if not os.path.exists(self.library_path):
-            return False
-        
-        cards = []
-        found = False
-        with open(self.library_path, 'r', encoding='utf-8') as f:
-            for line in f:
-                if line.strip():
-                    card = json.loads(line)
-                    if card.get('guid') == guid:
-                        found = True
-                        continue
-                    cards.append(card)
-        
-        if found:
-            with open(self.library_path, 'w', encoding='utf-8') as f:
-                for card in cards:
-                    f.write(json.dumps(card, ensure_ascii=False) + '\n')
-        return found
-
-    def update_card(self, guid, fields=None, tags=None):
-        if not os.path.exists(self.library_path):
-            return False
-        
-        cards = []
-        found = False
-        with open(self.library_path, 'r', encoding='utf-8') as f:
-            for line in f:
-                if line.strip():
-                    card = json.loads(line)
-                    if card.get('guid') == guid:
-                        found = True
-                        if fields is not None:
-                            card['fields'] = fields
-                        if tags is not None:
-                            card['tags'] = tags
-                        card['updated_at'] = datetime.now().isoformat()
-                    cards.append(card)
-        
-        if found:
-            with open(self.library_path, 'w', encoding='utf-8') as f:
-                for card in cards:
-                    f.write(json.dumps(card, ensure_ascii=False) + '\n')
-        return found
-
     def _matches_filters(self, card, filters):
         if not filters:
             return True
@@ -113,4 +63,14 @@ class LibraryManager:
                 return False
             if k == 'note_type' and v != card.get('note_type'):
                 return False
+            if k == 'search':
+                # Case-insensitive substring search across all fields
+                search_term = v.lower()
+                found = False
+                for field_val in card['fields'].values():
+                    if search_term in str(field_val).lower():
+                        found = True
+                        break
+                if not found:
+                    return False
         return True

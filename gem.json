@@ -1,6 +1,6 @@
 {
   "name": "anki-forge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Offline flashcard factory with persistent ID tracking and flexible packaging.",
   "author": "Bradford Kulick",
   "generator": "gemonade-sys",

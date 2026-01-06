@@ -22,11 +22,16 @@ class AnkiExporter:
             ]
         )
 
-    def pack(self, cards, deck_name, output_path):
-        # We need a unique ID for the deck too. Let's hash the name or use a constant.
-        deck_id = hash(deck_name) % (10**10)
-        deck = genanki.Deck(deck_id, deck_name)
+    def pack(self, cards, deck_name_override=None, output_path="output.apkg"):
+        decks = {}
         
+        def get_or_create_deck(name):
+            if name not in decks:
+                # Deterministic ID based on deck name
+                deck_id = int(hash(name) % (10**10))
+                decks[name] = genanki.Deck(deck_id, name)
+            return decks[name]
+
         models = {}
         media_files = []
 
@@ -35,6 +40,15 @@ class AnkiExporter:
             if nt_key not in models:
                 models[nt_key] = self._create_model(nt_key)
             
+            # Determine target deck
+            if deck_name_override:
+                target_deck_name = deck_name_override
+            else:
+                # Fallback to note_type default, or "Default"
+                target_deck_name = self.note_types[nt_key].get('default_deck', 'Default')
+            
+            deck = get_or_create_deck(target_deck_name)
+
             # Map fields in order
             field_values = [card_data['fields'].get(f, "") for f in self.note_types[nt_key]['fields']]
             
@@ -59,7 +73,7 @@ class AnkiExporter:
             )
             deck.add_note(note)
 
-        package = genanki.Package(deck)
+        package = genanki.Package(list(decks.values()))
         package.media_files = media_files
         package.write_to_file(output_path)
         return output_path

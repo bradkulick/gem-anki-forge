@@ -2,21 +2,25 @@
   "korean_vocab": {
     "model_id": 1698245001,
     "name": "Korean Vocab",
-    "fields": ["Korean", "English", "Picture", "Audio"]
+    "fields": ["Korean", "English", "Picture", "Audio"],
+    "default_deck": "Korean::Vocab"
   },
   "korean_alphabet": {
     "model_id": 1698245004,
     "name": "Korean Alphabet",
-    "fields": ["Letter", "Name", "Mnemonic", "Audio"]
+    "fields": ["Letter", "Name", "Mnemonic", "Audio"],
+    "default_deck": "Korean::Alphabet"
   },
   "tech_concept": {
     "model_id": 1698245002,
     "name": "Tech Concept",
-    "fields": ["Concept", "Explanation", "CodeSnippet"]
+    "fields": ["Concept", "Explanation", "CodeSnippet"],
+    "default_deck": "Tech::Concepts"
   },
   "simple": {
     "model_id": 1698245003,
     "name": "Simple Front/Back",
-    "fields": ["Front", "Back"]
+    "fields": ["Front", "Back"],
+    "default_deck": "Default"
   }
 }
