@@ -1,0 +1,12 @@
+{
+  "Korean Master": {
+    "query": "note_type:korean_vocab",
+    "deck_name": "Korean::Master",
+    "output": "Korean_Master.apkg"
+  },
+  "Tech Master": {
+    "query": "note_type:tech_concept",
+    "deck_name": "Tech::Master",
+    "output": "Tech_Master.apkg"
+  }
+}

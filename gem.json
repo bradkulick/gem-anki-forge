@@ -1,0 +1,8 @@
+{
+  "name": "anki-forge",
+  "version": "0.1.0",
+  "description": "Offline flashcard factory with persistent ID tracking and flexible packaging.",
+  "author": "User",
+  "generator": "gemonade-sys",
+  "python_dependencies": "requirements.txt"
+}
